@@ -19,3 +19,8 @@ export interface InputKhuyenMaiveDetail {
     NgayDi: string;
     NgayXP: string;
 }
+
+export interface FormTicket {
+    from: string;
+    to: string;
+}
