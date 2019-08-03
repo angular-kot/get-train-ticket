@@ -1,4 +1,10 @@
-export const RailwayName = [{Id: 1, MaGa: 'AHO', TenGa: 'An Hòa', SKeys: 'a,ah,anhoa,an hoa'}, {
+export interface RailwayName {
+    Id: number;
+    MaGa: string;
+    TenGa: string;
+    SKeys: string;
+}
+export const STATION_NAME: Array<RailwayName> = [{Id: 1, MaGa: 'AHO', TenGa: 'An Hòa', SKeys: 'a,ah,anhoa,an hoa'}, {
     Id: 2,
     MaGa: 'ATH',
     TenGa: 'Ấm Thượng',
@@ -293,7 +299,7 @@ export const RailwayName = [{Id: 1, MaGa: 'AHO', TenGa: 'An Hòa', SKeys: 'a,ah,
     MaGa: 'QTI',
     TenGa: 'Quảng Trị',
     SKeys: 'QT,QTI,quang tri,quangtri'
-}, {Id: 123, MaGa: 'QTR', TenGa: 'Quán Triều', SKeys: ''}, {
+}, {Id: 123, MaGa: 'QTR', TenGa: 'Quán Triều', SKeys: 'QTR,quantrieu,quan trieu'}, {
     Id: 124,
     MaGa: 'SGO',
     TenGa: 'Sài Gòn',

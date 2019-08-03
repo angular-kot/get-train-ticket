@@ -1,19 +1,47 @@
-<form>
-    <div class="form-group">
+<div class="position-relative">
+    <div (focusout)="resetSearchResult($event)" class="form-group" [class.position-relative]="resultStation && onFromInput">
         <label for="from">Ga đi</label>
         <input name="from"
                [(ngModel)]="formTicket.from"
-               (ngModelChange)="searchStation($event)"
+               (ngModelChange)="searchStation($event, true)"
                type="text"
                class="form-control"
                id="from"
                placeholder="Hà Nội">
+        <div *ngIf="resultStation && onFromInput" class="position-absolute w-100 ">
+            <ul class="list-group">
+                <li (click)="setStation($event, item, true)"
+                    *ngFor="let item of resultStation"
+                    [class.display-none]="formTicket.to && formTicket.to === item.TenGa"
+                    class="list-group-item pointer">
+                    {{item.TenGa}}
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="form-group">
+    <div (focusout)="resetSearchResult($event)" class="form-group" [class.position-relative]="resultStation && !onFromInput">
         <label for="to">Ga đến</label>
-        <input name="to" [(ngModel)]="formTicket.to" type="text" class="form-control" id="to" placeholder="Sài Gòn">
+        <input name="to"
+               [(ngModel)]="formTicket.to"
+               (ngModelChange)="searchStation($event)"
+               type="text"
+               class="form-control"
+               id="to"
+               placeholder="Sài Gòn">
+        <div *ngIf="resultStation && !onFromInput" class="position-absolute w-100">
+            <ul class="list-group">
+                <li (click)="setStation($event, item, false)"
+                    *ngFor="let item of resultStation"
+                    [class.display-none]="formTicket.from && formTicket.from === item.TenGa"
+                    class="list-group-item pointer">
+                    {{item.TenGa}}
+                </li>
+            </ul>
+        </div>
     </div>
-    <button class="btn btn-block" (click)="showData($event)">Show Data</button>
+</div>
+<form>
+    <button class="btn btn-block" (click)="getTicket($event)">Show Data</button>
     <div class="form-group">
         <label for="exampleFormControlSelect1">Example select</label>
         <select class="form-control" id="exampleFormControlSelect1">
