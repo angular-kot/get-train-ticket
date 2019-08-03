@@ -30,7 +30,16 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.firstGo();
         this.getTicket();
+    }
+
+    firstGo() {
+        // this.appService.get(AppConstants.DSVN).subscribe(result => {
+        //     console.log(result);
+        // }, err => {
+        //     console.log(err);
+        // });
     }
 
     getTicket() {
