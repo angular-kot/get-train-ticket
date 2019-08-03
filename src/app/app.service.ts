@@ -34,7 +34,9 @@ export class AppService {
     }
 
     get(url: string) {
-        return this.http.get(url);
+        return this.http.get(url).pipe(
+            catchError(AppService.handleError)
+        );
     }
 
     post(url: string, body?: any): Observable<any> {
