@@ -39,6 +39,13 @@ export class AppService {
         );
     }
 
+    getCSV() {
+        return this.http.get('assets/data.csv', {responseType: 'text'})
+            .pipe(
+                catchError(AppService.handleError)
+            )
+    }
+
     post(url: string, body?: any): Observable<any> {
         this.setOptions();
         return this.http.post<any>(url, body, this.options).pipe(

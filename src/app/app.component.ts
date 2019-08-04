@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
     private onFromInput: boolean;
     private formTicket: FormTicket;
     private resultStation: Array<RailwayName>;
+    private csv: any;
 
     constructor(private appService: AppService) {
         this.formTicket = {
@@ -39,6 +40,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.convertFile();
     }
 
     firstGo() {
@@ -49,7 +51,7 @@ export class AppComponent implements OnInit {
         // });
     }
 
-    getTicket(e: Event) {
+    private getTicket(e: Event) {
         e.stopPropagation();
         this.appService.post(AppConstants.GET_TICKET, this.data).subscribe(result => {
             console.log(result);
@@ -58,7 +60,7 @@ export class AppComponent implements OnInit {
         });
     }
 
-    searchStation(value: string, from?: true) {
+    private searchStation(value: string, from?: true) {
         from ? this.onFromInput = true : this.onFromInput = false;
         this.resultStation = new Array<RailwayName>();
         STATION_NAME.forEach(item => {
@@ -70,7 +72,7 @@ export class AppComponent implements OnInit {
         });
     }
 
-    setStation(e: Event, data: RailwayName, from?: boolean) {
+    private setStation(e: Event, data: RailwayName, from?: boolean) {
         e.stopPropagation();
         this.resultStation = undefined;
         if (from) {
@@ -81,7 +83,7 @@ export class AppComponent implements OnInit {
         return this.data.InputKhuyenMaiVeDetail.MaGaDen = data.MaGa;
     }
 
-    resetSearchResult(e: Event) {
+    private resetSearchResult(e: Event) {
         e.stopPropagation();
         this.resultStation = undefined;
         if (this.formTicket.from || this.formTicket.to) {
@@ -106,8 +108,30 @@ export class AppComponent implements OnInit {
         }
     }
 
-    showData(e: Event) {
-        e.stopPropagation();
-        console.log(this.data);
+    private convertFile() {
+        this.appService.getCSV().subscribe(file => {
+            let lines = file.split('\r');
+            let result = new Array<any>();
+            let headers = lines[0].split(',');
+            lines.forEach(line => {
+                let current_line = line.split(',');
+                let obj = {};
+                headers.forEach((title, i) => {
+                    if (title === 'Price') {
+                        return obj[title] = parseInt(current_line[i]);
+                    }
+                    if (title === 'Latitude' || title === 'Longitude') {
+                        return obj[title] = parseFloat(current_line[i]);
+                    }
+                    return obj[title] = current_line[i];
+                });
+                result.push(obj);
+            });
+            result.splice(0,1);
+            console.log(result);
+        }, error => {
+            console.log(error);
+        });
     }
+
 }
