@@ -16,7 +16,6 @@ export class AppComponent implements OnInit {
     private onFromInput: boolean;
     private formTicket: FormTicket;
     private resultStation: Array<RailwayName>;
-    private csv: any;
 
     constructor(private appService: AppService) {
         this.formTicket = {
@@ -41,14 +40,6 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.convertFile();
-    }
-
-    firstGo() {
-        // this.appService.get(AppConstants.DSVN).subscribe(result => {
-        //     console.log(result);
-        // }, err => {
-        //     console.log(err);
-        // });
     }
 
     private getTicket(e: Event) {
