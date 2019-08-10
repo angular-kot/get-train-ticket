@@ -3,6 +3,7 @@ import {AppService} from './app.service';
 import {AppConstants} from './app.constants';
 import {FormTicket, GetTicket} from './api/get-ticket';
 import {RailwayName, STATION_NAME} from './api/railway-name';
+import {PRODUCT} from "./api/product";
 
 @Component({
     selector: 'app-root',
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit {
     private onFromInput: boolean;
     private formTicket: FormTicket;
     private resultStation: Array<RailwayName>;
+    private showData: any;
 
     constructor(private appService: AppService) {
         this.formTicket = {
@@ -101,28 +103,55 @@ export class AppComponent implements OnInit {
 
     private convertFile() {
         this.appService.getCSV().subscribe(file => {
-            let lines = file.split('\r');
+            let lines = file.split('\n');
             let result = new Array<any>();
-            let headers = lines[0].split(',');
+            // let headers = lines[0].split(',');
             lines.forEach(line => {
                 let current_line = line.split(',');
-                let obj = {};
-                headers.forEach((title, i) => {
-                    if (title === 'Price') {
-                        return obj[title] = parseInt(current_line[i]);
+                let obj: PRODUCT = {
+                    code: undefined,
+                    name: undefined,
+                    category: NaN,
+                    group: undefined,
+                    description: undefined,
+                    min_quantity: NaN,
+                    warehouse: undefined,
+                    quantity: NaN,
+                    total_price: NaN,
+                    price: NaN,
+                    photo: new Array<string>(),
+                    tags: new Array<string>(),
+                };
+                Object.keys(obj).forEach((title, i) => {
+                    if (title === 'name' || title === 'code' || title === 'description') {
+                        return obj[title] = current_line[i];
                     }
-                    if (title === 'Latitude' || title === 'Longitude') {
-                        return obj[title] = parseFloat(current_line[i]);
-                    }
-                    return obj[title] = current_line[i];
                 });
                 result.push(obj);
             });
-            result.splice(0,1);
+            result.splice(0, 1);
+            this.showData = result;
             console.log(result);
         }, error => {
             console.log(error);
         });
     }
 
+    private xoa_dau(str) {
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        str = str.replace(/À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ/g, "A");
+        str = str.replace(/È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ/g, "E");
+        str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "I");
+        str = str.replace(/Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ/g, "O");
+        str = str.replace(/Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ/g, "U");
+        str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "Y");
+        str = str.replace(/Đ/g, "D");
+        return str;
+    }
 }

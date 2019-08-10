@@ -40,7 +40,7 @@ export class AppService {
     }
 
     getCSV() {
-        return this.http.get('assets/data.csv', {responseType: 'text'})
+        return this.http.get('assets/vpptanthinh.csv', {responseType: 'text'})
             .pipe(
                 catchError(AppService.handleError)
             )
